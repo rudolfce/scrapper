@@ -1,0 +1,20 @@
+<html>
+    <head>
+        <title>{%- if user %}{{user.username}} - {%endif%}The Twitter Scrapper</title>
+    </head>
+    <body>
+        {%- if page_output == "user" %} 
+            {%- if user %}
+                <h1>Data for {{user.name}}</h1>
+                <p>Username: {{user.username}}</p>
+                <p>Name: {{user.name}}</p>
+                <p>Description: {{user.bio}}</p>
+                <p>Location: {{user.location}}</p>
+            {%-else%}
+                <p>User not found</p>
+            {%-endif%}
+        {%- elif page_output == "index" %}
+            <p>You should really, really type a username...</p>
+        {%endif%}
+    </body>
+</html>
