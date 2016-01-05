@@ -1,3 +1,5 @@
+#-*- encoding: utf-8 -*-
+
 import requests
 import json
 from bs4 import BeautifulSoup
@@ -28,6 +30,6 @@ def mine_user(user_name):
     location = profile_data["location"]
 
     return {"username": output_username,
-            "name": str(name),
-            "bio": str(bio),
-            "location": str(location)}
+            "name": name,
+            "bio": bio,
+            "location": location}
