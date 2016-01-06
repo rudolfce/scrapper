@@ -1,7 +1,0 @@
-{
-    "dialect":"postgresql",
-    "user":"rudolf",
-    "server":"localhost",
-    "password":"eumesmo",
-    "database":"teste_scrapper"
-}
