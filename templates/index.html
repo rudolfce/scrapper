@@ -10,6 +10,9 @@
                 <p>Name: {{user.name}}</p>
                 <p>Description: {{user.bio}}</p>
                 <p>Location: {{user.location}}</p>
+                <p>{%-if user.fresh%}Fresh!{%else%}<small><i>Queried from cache database.</i>
+                    last refresh: {{user.query_date}}<br>
+                    <a href='{{user.user_name}}?refresh=1'>Click here to refresh data</a></small>{%endif%}</p>
             {%-else%}
                 <p>User not found</p>
             {%-endif%}

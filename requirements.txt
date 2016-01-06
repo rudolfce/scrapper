@@ -1,6 +1,10 @@
-Flask==0.10.1
 Werkzeug==0.11.2
+MarkupSafe==0.23
 Jinja2==2.8
 itsdangerous==0.24
+Flask==0.10.1
+Flask-Script==2.0.5
 requests==2.8.1
 beautifulsoup4==4.4.1
+psycopg2==2.6.1
+SQLAlchemy==1.0.11

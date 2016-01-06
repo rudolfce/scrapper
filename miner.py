@@ -2,18 +2,13 @@
 
 import requests
 import json
+from datetime import datetime
 from bs4 import BeautifulSoup
 
-def mine_user(user_name):
-    '''
-    Miner used to gather information from a twitter accout defined as user_name.
-    Returns dictionary with:
-    - username;
-    - name;
-    - bio;
-    - location.
-    '''
-    output_username='@' + str(user_name)
+from db_stuff import db_session
+from db_stuff.models import User
+
+def query_twitter(user_name):
     url_request = 'https://twitter.com/' + str(user_name)
     r = requests.get(url_request)
     if '404' in r.headers['status']:
@@ -28,8 +23,45 @@ def mine_user(user_name):
     name = profile_data["name"]
     bio = profile_data["description"]
     location = profile_data["location"]
+    time = datetime.now()
+    query_date = time.strftime('%m/%d/%Y %I:%M%p')
 
-    return {"username": output_username,
+    return {"username": user_name,
             "name": name,
             "bio": bio,
-            "location": location}
+            "location": location,
+            "query_date": query_date}
+    
+
+def mine_user(user_name, refresh):
+    '''
+    Miner used to gather information from a twitter accout defined as user_name.
+    Returns dictionary with:
+    - username;
+    - name;
+    - bio;
+    - location.
+    '''
+    user = User.query.filter(User.username==user_name).first()
+    if not user:
+        user_dict = query_twitter(user_name)
+        if not user_dict:
+            return None
+        user = User(**user_dict)
+        db_session.add(user)
+        db_session.commit()
+        user_dict['fresh'] = True
+    else:
+        if not refresh:
+            user_dict = user.get_dict()
+            user_dict['fresh'] = False
+        else:
+            user_dict = query_twitter(user_name)
+            if not user_dict:
+                return None
+            user=User(**user_dict)
+            db_session.query(User).filter_by(username=user_name).update(user_dict)
+            db_session.commit()
+            user_dict['fresh']=True
+
+    return user_dict

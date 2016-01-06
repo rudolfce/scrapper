@@ -1,0 +1,7 @@
+{
+    "dialect":"postgresql",
+    "user":"rudolf",
+    "server":"localhost",
+    "password":"some_password",
+    "database":"scrapper_test"
+}

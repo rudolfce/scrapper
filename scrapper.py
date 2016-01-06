@@ -1,5 +1,4 @@
 #-*- encoding: utf-8 -*-
-
 from flask import Flask, render_template, request, redirect
 
 import miner
@@ -18,9 +17,10 @@ def index():
 
 @app.route('/<user_name>')
 def show_user(user_name=None):
+    refresh = request.args.get('refresh', '')
     page_output = "user"
-    user = miner.mine_user(user_name)
+    user = miner.mine_user(user_name, refresh)
     return render_template("index.html", user=user, page_output=page_output)
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
