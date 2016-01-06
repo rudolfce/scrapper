@@ -45,7 +45,8 @@ It is required that a table with name 'users' and the following columns:
 - name - string compatible type;
 - username - string compatible type;
 - bio - string compatible type;
-- location - string compatible type.
+- location - string compatible type;
+- query_date - string compatible type.
 
 Once the database is set, the file db\_data.json must be edited to match the details of
 your newly set environment. Since I use SQLAlchemy for database interface and use only
