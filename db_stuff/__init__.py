@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-db_data = open('db_data.json').read()
+db_data = open('config/db_data.json').read()
 db_data = json.loads(db_data)
 
 engine_creation = "%s://%s:%s@%s/%s" % (db_data['dialect'], db_data['user'], db_data['password'],

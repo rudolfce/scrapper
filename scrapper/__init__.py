@@ -1,7 +1,7 @@
 #-*- encoding: utf-8 -*-
 from flask import Flask, render_template, request, redirect
 
-import miner
+from .miner import mine_user
 
 app = Flask(__name__)
 
@@ -19,7 +19,7 @@ def index():
 def show_user(user_name=None):
     refresh = request.args.get('refresh', '')
     page_output = "user"
-    user = miner.mine_user(user_name, refresh)
+    user = mine_user(user_name, refresh)
     return render_template("index.html", user=user, page_output=page_output)
 
 if __name__ == "__main__":
