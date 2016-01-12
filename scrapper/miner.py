@@ -43,25 +43,19 @@ def mine_user(user_name, refresh):
     - location.
     '''
     user = User.query.filter(User.username==user_name).first()
-    if not user:
+    if (not user) or refresh:
         user_dict = query_twitter(user_name)
         if not user_dict:
             return None
         user = User(**user_dict)
-        db_session.add(user)
+        if refresh:
+            db_session.query(User).filter_by(username=user_name).update(user_dict)
+        else:
+            db_session.add(user)
         db_session.commit()
         user_dict['fresh'] = True
     else:
-        if not refresh:
-            user_dict = user.get_dict()
-            user_dict['fresh'] = False
-        else:
-            user_dict = query_twitter(user_name)
-            if not user_dict:
-                return None
-            user=User(**user_dict)
-            db_session.query(User).filter_by(username=user_name).update(user_dict)
-            db_session.commit()
-            user_dict['fresh']=True
+        user_dict = user.get_dict()
+        user_dict['fresh'] = False
 
     return user_dict
