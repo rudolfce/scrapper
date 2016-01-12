@@ -6,7 +6,7 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(50))
     username = Column(String(30), unique=True)
-    bio = Column(String(50))
+    bio = Column(String)
     location = Column(String(50))
     query_date = Column(String(20))
 

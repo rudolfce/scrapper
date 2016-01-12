@@ -48,10 +48,10 @@ def mine_user(user_name, refresh):
         if not user_dict:
             return None
         user = User(**user_dict)
-        if refresh:
-            db_session.query(User).filter_by(username=user_name).update(user_dict)
-        else:
+        if not user:
             db_session.add(user)
+        else:
+            db_session.query(User).filter_by(username=user_name).update(user_dict)
         db_session.commit()
         user_dict['fresh'] = True
     else:
