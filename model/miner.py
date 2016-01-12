@@ -5,8 +5,8 @@ import json
 from datetime import datetime
 from bs4 import BeautifulSoup
 
-from db_stuff import db_session
-from db_stuff.models import User
+from . import db_session
+from .models import User
 
 def query_twitter(user_name):
     url_request = 'https://twitter.com/' + str(user_name)

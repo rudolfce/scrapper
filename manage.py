@@ -2,7 +2,7 @@
 
 from flask.ext.script import Manager
 
-from scrapper import app
+from controller import app
 
 manager = Manager(app)
 #Still no custom commands
