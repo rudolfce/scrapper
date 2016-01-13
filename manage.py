@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 
 from flask.ext.script import Manager
+from sqlalchemy_utils import create_database, drop_database, database_exists
 
-from controller import app
-from model.management import initdb, dropdb
+from scrapper.models import db_url, engine, Base
+from scrapper.models.user import User
+from scrapper.controller import app
+
 
 manager = Manager(app)
 
@@ -11,24 +14,27 @@ manager = Manager(app)
 def init_db():
     '''
     Initialize database. Should be run before runserver command. Database details
-    can be found (and changed) on config/db_data.json.
+    can be found (and changed) on scrapper/config/server.py
     '''
-    if initdb():
+    if not database_exists(db_url):
+        create_database(db_url)
+        Base.metadata.create_all(engine)
+        print("Done")
+    else:
         print("Database already exists")
         exit(1)
-    else:
-        print("Done")
 
 @manager.command
 def drop_db():
     '''
-    Drops database according to config/db_data.json.
+    Drops database according to scrapper/config/server.py.
     '''
-    if dropdb():
+    if database_exists(db_url):
+        drop_database(db_url)
+        print("Done")
+    else:
         print("Database doesn't exist")
         exit(1)
-    else:
-        print("Done")
 
 if __name__=="__main__":
     manager.run()

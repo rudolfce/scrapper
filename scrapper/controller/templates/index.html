@@ -1,6 +1,7 @@
 <html>
     <head>
         <title>{%- if user %}{{user.username}} - {%endif%}The Twitter Scrapper</title>
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     </head>
     <body>
         {%- if page_output == "user" %} 
