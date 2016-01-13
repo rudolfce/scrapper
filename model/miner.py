@@ -47,9 +47,9 @@ def mine_user(user_name, refresh):
         user_dict = query_twitter(user_name)
         if not user_dict:
             return None
-        user = User(**user_dict)
+        t_user = User(**user_dict)
         if not user:
-            db_session.add(user)
+            db_session.add(t_user)
         else:
             db_session.query(User).filter_by(username=user_name).update(user_dict)
         db_session.commit()

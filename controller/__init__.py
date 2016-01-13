@@ -1,7 +1,7 @@
 #-*- encoding: utf-8 -*-
 from flask import Flask, render_template, request, redirect
 
-from model.miner import mine_user
+import model.miner
 
 
 app = Flask(__name__)
@@ -15,12 +15,15 @@ def index():
     else:
         return redirect(request.form['user_name'])
 
+@app.route('/favicon.ico')
+def return_favicon():
+    return 404
 
 @app.route('/<user_name>')
 def show_user(user_name=None):
     refresh = request.args.get('refresh', '')
     page_output = "user"
-    user = mine_user(user_name, refresh)
+    user = model.miner.mine_user(user_name, refresh)
     return render_template("index.html", user=user, page_output=page_output)
 
 if __name__ == "__main__":
