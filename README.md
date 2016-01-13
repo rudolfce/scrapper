@@ -1,7 +1,7 @@
 #Scrapper for Twitter data about users#
 
 This is a simple python webservice designed to scrap
-informations about a requested user. It is designed to run on Python3,
+information about a requested user. It is designed to run on Python3,
 but is still compatible with Python2 (or so I'm being misled to believe). 
 It is an exercise for learning [flask][flask] and has little to no
 ambitions for now.
@@ -14,8 +14,8 @@ ambitions for now.
 - psycopg2
 - SQLAlchemy
 
-Although psycopg2 is a requirement for SQLAlchemy, it must be installed manually
-since pip does not does that automatically. Either way, it's in the requirements.txt.
+Although psycopg2 is not exactly a requirement, but was included since this project
+was tested with PostgreSQL.
 
 ##Details##
 
@@ -33,39 +33,49 @@ Virtual Environment if any of the versions is wrong and you are lazy like me.
 Really, I do suggest using a virtual environment.
 
 ```sh
-pip install -r requirements.txt
+$ virtualenv -p python3 env
+(env) $ pip install -r requirements.txt
 ```
 
 Since I recently added database functionality, it is important to set the database
-before launching. How to set up a database is not the matter for this readme - for that,
-reference to your favourite database server's documentation. Future updates might include
-automatic configuration, but I'm not certain yet - will work on it, for sure.
+before launching. To initialize the database, first the config/db\_data.json must
+be set to match your preferences and the server you have running. Once the settings
+are to your taste, you can run the init\_db command from manage.py:
+
+```sh
+(env) $ ./manage.py init_db
+```
+
+Since I use SQLAlchemy for database interface and use only
+simple queries, it's quite likely that any database server supported by SQLAlchemy is
+going to work out of the box.
+
+
+###If you want to set the table manualy###
 
 It is required that a table with name 'users' and the following columns:
 - name - string compatible type;
 - username - string compatible type;
 - bio - string compatible type;
 - location - string compatible type;
-- query_date - string compatible type.
-
-Once the database is set, the file db\_data.json must be edited to match the details of
-your newly set environment. Since I use SQLAlchemy for database interface and use only
-simple queries, it's quite likely that any database server supported by SQLAlchemy is
-going to work out of the box.
+- query\_date - string compatible type.
 
 ##Usage##
 
-If you execute scrapper.py, it will open by default a HTTP server
-listening to port 5000. Once it is working, you can test it by
+To get the server to work, the manage.py has everything it needs to start. The runserver
+command starts a server on port 5000 by default. If used with -d, as default for
+the flask.ext.script module, the server will be set to debug mode.
+
+```sh
+(env) $ ./manage.py runserver
+```
+
+Once it is working, you can test it by
 opening the page in your browser by requesting http://127.0.0.1:5000.
 It should return a warning saying that you should type in some username
 and a form. If you submit the form, the user will be scrapped and shown.
 If this user is in the database, the local data will be shown instead (with
 the option to refresh the entry).
-
-Another way to run the server is through the manage.py. It has little use
-for now, but as the project grows it might be needed to deal with stored
-data.
 
 ##Changing html layout##
 
