@@ -5,7 +5,7 @@ from sqlalchemy_utils import create_database, drop_database, database_exists
 
 from scrapper.models import db_url, engine
 from scrapper.models.user import Base
-from scrapper.controller import app
+from scrapper.controllers import app
 
 
 manager = Manager(app)

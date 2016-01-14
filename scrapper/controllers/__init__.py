@@ -2,7 +2,7 @@
 import os
 from flask import Flask, render_template, request, redirect, send_from_directory
 
-from scrapper.controller.miner import mine_user
+from scrapper.controllers.miner import mine_user
 from scrapper.config.server import DEBUG
 
 
