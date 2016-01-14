@@ -3,6 +3,7 @@ import os
 from flask import Flask, render_template, request, redirect, send_from_directory
 
 from scrapper.controller.miner import mine_user
+from scrapper.config.server import DEBUG
 
 
 app = Flask(__name__)
@@ -29,4 +30,4 @@ def show_user(user_name=None):
     return render_template("index.html", user=user, page_output=page_output)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=DEBUG)

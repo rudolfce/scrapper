@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from flask.ext.script import Manager
 from sqlalchemy_utils import create_database, drop_database, database_exists
