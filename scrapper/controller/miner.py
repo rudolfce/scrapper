@@ -11,7 +11,7 @@ from scrapper.models.user import User
 def query_twitter(user_name):
     url_request = 'https://twitter.com/' + str(user_name)
     response = requests.get(url_request)
-    if '404' in response.status_code:
+    if response.status_code == 404:
         return None
 
     soup = BeautifulSoup(response.text)
@@ -47,10 +47,10 @@ def mine_user(user_name, refresh):
         if not user_dict:
             return None
         t_user = user or User()
-        for key, value in user_dict:
-            setattr(t_user, key, value)
-
-        db_session.add(t_user)
+        for key, value in user_dict.items():
+                setattr(t_user, key, value)   
+        if not refresh: 
+            db_session.add(t_user)
         db_session.commit()
         user_dict['fresh'] = True
     else:

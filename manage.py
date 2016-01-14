@@ -3,8 +3,8 @@
 from flask.ext.script import Manager
 from sqlalchemy_utils import create_database, drop_database, database_exists
 
-from scrapper.models import db_url, engine, Base
-from scrapper.models.user import User
+from scrapper.models import db_url, engine
+from scrapper.models.user import Base
 from scrapper.controller import app
 
 

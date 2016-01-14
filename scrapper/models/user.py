@@ -10,7 +10,7 @@ class User(Base):
     location = Column(String(50))
     query_date = Column(String(20))
 
-    def __init__(self, name, username, bio, location, query_date):
+    def __init__(self, name='', username='', bio='', location='', query_date=''):
         self.name = name
         self.username = username
         self.bio = bio
