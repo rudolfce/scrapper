@@ -18,7 +18,7 @@ class User(Base):
         self.query_date = query_date
 
     def __repr__(self):
-        return "<User %r>" % (self.username)
+        return "<User {0!r}>".format(self.username)
 
     def get_dict(self):
         return {"name": self.name,

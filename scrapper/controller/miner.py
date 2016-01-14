@@ -10,12 +10,11 @@ from scrapper.models.user import User
 
 def query_twitter(user_name):
     url_request = 'https://twitter.com/' + str(user_name)
-    r = requests.get(url_request)
-    if '404' in r.headers['status']:
+    response = requests.get(url_request)
+    if '404' in response.status_code:
         return None
 
-    r = r.text
-    soup = BeautifulSoup(r,"html.parser")
+    soup = BeautifulSoup(response.text)
 
     data = soup.find("input", attrs={"class":"json-data"})
     data = json.loads(data["value"])
@@ -31,7 +30,7 @@ def query_twitter(user_name):
             "bio": bio,
             "location": location,
             "query_date": query_date}
-    
+
 
 def mine_user(user_name, refresh):
     '''
@@ -43,15 +42,15 @@ def mine_user(user_name, refresh):
     - location.
     '''
     user = User.query.filter(User.username==user_name).first()
-    if (not user) or refresh:
+    if not user or refresh:
         user_dict = query_twitter(user_name)
         if not user_dict:
             return None
-        t_user = User(**user_dict)
-        if not user:
-            db_session.add(t_user)
-        else:
-            db_session.query(User).filter_by(username=user_name).update(user_dict)
+        t_user = user or User()
+        for key, value in user_dict:
+            setattr(t_user, key, value)
+
+        db_session.add(t_user)
         db_session.commit()
         user_dict['fresh'] = True
     else:
