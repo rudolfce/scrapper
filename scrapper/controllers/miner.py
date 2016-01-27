@@ -1,12 +1,11 @@
 #-*- encoding: utf-8 -*-
-
 import requests
 import json
 from datetime import datetime
 from bs4 import BeautifulSoup
 
-from scrapper.models import db_session
 from scrapper.models.user import User
+
 
 def query_twitter(user_name):
     url_request = 'https://twitter.com/' + str(user_name)
@@ -50,8 +49,7 @@ def mine_user(user_name, refresh):
         for key, value in user_dict.items():
                 setattr(t_user, key, value)   
         if not refresh: 
-            db_session.add(t_user)
-        db_session.commit()
+            t_user.save()
         user_dict['fresh'] = True
     else:
         user_dict = user.get_dict()

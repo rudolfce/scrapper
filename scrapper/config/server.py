@@ -1,6 +1,2 @@
-DIALECT = "postgresql"
-USER = "rudolf"
-SERVER = "localhost"
-PASSWORD = "some_password"
-DATABASE = "scrapper_test"
+SQLALCHEMY_DATABASE_URI = "postgresql://rudolf:some_password@localhost/scrapper_test"
 DEBUG = True

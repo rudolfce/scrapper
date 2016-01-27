@@ -1,14 +1,13 @@
-from sqlalchemy import Column, Integer, String
-from .__init__ import Base
+from scrapper import db
 
-class User(Base):
+class User(db.Model):
     __tablename__ = 'users'
-    id = Column(Integer, primary_key=True)
-    name = Column(String(50))
-    username = Column(String(30), unique=True)
-    bio = Column(String)
-    location = Column(String(50))
-    query_date = Column(String(20))
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50))
+    username = db.Column(db.String(30), unique=True)
+    bio = db.Column(db.String(160))
+    location = db.Column(db.String(160))
+    query_date = db.Column(db.String(20))
 
     def __init__(self, name='', username='', bio='', location='', query_date=''):
         self.name = name
@@ -19,6 +18,16 @@ class User(Base):
 
     def __repr__(self):
         return "<User {0!r}>".format(self.username)
+
+    def save(self, commit=True):
+        db.session.add(self)
+        if commit:
+            db.session.commit()
+
+    def update(self, commit=True):
+        db.session.refresh(self)
+        if commit:
+            db.session.commit()
 
     def get_dict(self):
         return {"name": self.name,
