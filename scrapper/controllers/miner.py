@@ -13,7 +13,7 @@ def query_twitter(user_name):
     if response.status_code == 404:
         return None
 
-    soup = BeautifulSoup(response.text)
+    soup = BeautifulSoup(response.text, "html.parser")
 
     data = soup.find("input", attrs={"class":"json-data"})
     data = json.loads(data["value"])
