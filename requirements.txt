@@ -1,7 +1,7 @@
--sqlite3==0.0.0
 beautifulsoup4==4.4.1
 decorator==4.0.6
 Flask==0.10.1
+Flask-API==0.6.5
 Flask-Script==2.0.5
 Flask-SQLAlchemy==2.1
 Flask-Testing==0.4.2
