@@ -1,6 +1,8 @@
 #-*- encoding: utf-8 -*-
 import os
-from flask import render_template, request, redirect, Blueprint
+import json
+from flask import render_template, request, redirect, Blueprint, abort
+from flask.ext.api import status
 
 from scrapper.controllers.miner import mine_user
 
@@ -9,19 +11,14 @@ twitter = Blueprint('twitter', __name__, url_prefix = '/twitter')
 
 @twitter.route('/', methods=['GET', 'POST'])
 def index():
-    if request.method == 'GET':
-        page_output="index"
-        user = None
-        return render_template("index.html", user=user, page_output=page_output)
-    else:
-        return redirect('/twitter/{}'.format(request.form['user_name']))
+    abort(400)
 
 @twitter.route('/<user_name>')
 def show_user(user_name=None):
     refresh = request.args.get('refresh', '')
-    page_output = "user"
     user = miner.mine_user(user_name, refresh)
-    return render_template("index.html", user=user, page_output=page_output)
+    user = json.dumps(user)
+    return user, status.HTTP_200_OK
 
 if __name__ == "__main__":
     app.run()
