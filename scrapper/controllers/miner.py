@@ -5,8 +5,11 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 
 from scrapper.models.user import User
+from scrapper import make_celery
 
+celery = make_celery()
 
+@celery.task
 def query_twitter(user_name):
     url_request = 'https://twitter.com/' + str(user_name)
     response = requests.get(url_request)
@@ -30,7 +33,7 @@ def query_twitter(user_name):
             "location": location,
             "query_date": query_date}
 
-
+@celery.task
 def mine_user(user_name, refresh):
     '''
     Miner used to gather information from a twitter accout defined as user_name.
@@ -42,13 +45,14 @@ def mine_user(user_name, refresh):
     '''
     user = User.query.filter(User.username==user_name).first()
     if not user or refresh:
-        user_dict = query_twitter(user_name)
+        query_task = query_twitter.delay(user_name)
+        user_dict = query_task.get()
         if not user_dict:
             return None
         t_user = user or User()
         for key, value in user_dict.items():
-                setattr(t_user, key, value)   
-        if not refresh: 
+                setattr(t_user, key, value)
+        if not refresh:
             t_user.save()
         user_dict['fresh'] = True
     else:
