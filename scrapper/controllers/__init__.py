@@ -17,8 +17,11 @@ def index():
 def show_user(user_name=None):
     refresh = request.args.get('refresh', '')
     user = miner.mine_user(user_name, refresh)
-    user = json.dumps(user)
-    return user, status.HTTP_200_OK
+    if user:
+        user = json.dumps(user)
+        return user, status.HTTP_200_OK
+    else:
+        abort(404)
 
 if __name__ == "__main__":
     app.run()
