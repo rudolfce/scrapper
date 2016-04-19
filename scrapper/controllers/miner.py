@@ -10,31 +10,27 @@ from scrapper import make_celery
 celery = make_celery()
 
 @celery.task
-def query_twitter(user_name):
+def scrape_twitter(user_name):
+    user = User()
+    user.username = user_name
     url_request = 'https://twitter.com/' + str(user_name)
     response = requests.get(url_request)
-    if response.status_code == 404:
-        return None
+    if not (response.status_code == 404):
+        soup = BeautifulSoup(response.text, "html.parser")
 
-    soup = BeautifulSoup(response.text, "html.parser")
+        data = soup.find("input", attrs={"class":"json-data"})
+        data = json.loads(data["value"])
+        profile_data = data["profile_user"]
+        user.name = profile_data["name"]
+        user.bio = profile_data["description"]
+        user.location = profile_data["location"]
+        user.exists = True
+        time = datetime.now()
+        user.query_date = time.strftime('%m/%d/%Y %I:%M%p')
 
-    data = soup.find("input", attrs={"class":"json-data"})
-    data = json.loads(data["value"])
-    profile_data = data["profile_user"]
-    name = profile_data["name"]
-    bio = profile_data["description"]
-    location = profile_data["location"]
-    time = datetime.now()
-    query_date = time.strftime('%m/%d/%Y %I:%M%p')
+    user.save()
 
-    return {"username": user_name,
-            "name": name,
-            "bio": bio,
-            "location": location,
-            "query_date": query_date}
-
-@celery.task
-def mine_user(user_name, refresh):
+def query_database(user_name):
     '''
     Miner used to gather information from a twitter accout defined as user_name.
     Returns dictionary with:
@@ -44,19 +40,9 @@ def mine_user(user_name, refresh):
     - location.
     '''
     user = User.query.filter(User.username==user_name).first()
-    if not user or refresh:
-        query_task = query_twitter.delay(user_name)
-        user_dict = query_task.get()
-        if not user_dict:
-            return None
-        t_user = user or User()
-        for key, value in user_dict.items():
-                setattr(t_user, key, value)
-        if not refresh:
-            t_user.save()
-        user_dict['fresh'] = True
+    if not user:
+        return None
     else:
         user_dict = user.get_dict()
-        user_dict['fresh'] = False
 
-    return user_dict
+        return user_dict
