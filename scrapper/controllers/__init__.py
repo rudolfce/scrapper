@@ -18,7 +18,7 @@ def show_user(user_name=None):
     user = query_database(user_name)
     if (not user) or refresh:
         scrape_twitter.delay(user_name)
-        return make_response('Processing...', status.HTTP_202_ACCPETED)
+        return make_response('Processing...', status.HTTP_202_ACCEPTED)
     else:
         if user['exists']:
             user = json.dumps(user)

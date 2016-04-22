@@ -5,10 +5,10 @@ from celery import Celery
 
 db = SQLAlchemy()
 
-def create_app():
+def create_app(config='scrapper.config.default'):
     app = Flask(__name__)
 
-    app.config.from_object('scrapper.config.server')
+    app.config.from_object(config)
     db.init_app(app)
 
     from scrapper.controllers import twitter_bp
@@ -22,8 +22,8 @@ def create_app():
 
     return app
 
-def make_celery():
-    app = create_app()
+def make_celery(app=None):
+    app = app or create_app()
     celery = Celery(app.import_name, broker=app.config['CELERY_BROKER_URL'])
     celery.conf.update(app.config)
     TaskBase = celery.Task

@@ -13,7 +13,7 @@ def init_db():
     Initialize database. Should be run before runserver command. Database details
     can be found (and changed) on scrapper/config/server.py
     '''
-    from scrapper.config.server import SQLALCHEMY_DATABASE_URI as db_url
+    from scrapper.config.default import SQLALCHEMY_DATABASE_URI as db_url
     from scrapper import db
 
     if not database_exists(db_url):
@@ -29,7 +29,7 @@ def drop_db():
     '''
     Drops database according to scrapper/config/server.py.
     '''
-    from scrapper.config.server import SQLALCHEMY_DATABASE_URI as db_url
+    from scrapper.config.default import SQLALCHEMY_DATABASE_URI as db_url
 
     if database_exists(db_url):
         drop_database(db_url)
