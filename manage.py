@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 from flask.ext.script import Manager
-from sqlalchemy_utils import drop_database, database_exists, create_database
+from sqlalchemy_utils import create_database, database_exists, drop_database
 
 from scrapper import create_app
-
 
 manager = Manager(create_app)
 

@@ -1,4 +1,6 @@
 import json
+
+from scrapper.models.user import User
 from scrapper.tests import testBase
 
 
@@ -12,8 +14,6 @@ class twitterTest(testBase):
         assert response.status_code == 202
 
     def test_user_found(self):
-        from scrapper.models.user import User
-
         in_found = User()
         in_found.username="adabalubaba"
         in_found.exists = True
@@ -23,8 +23,6 @@ class twitterTest(testBase):
         assert response.status_code == 200
 
     def test_no_user_found(self):
-        from scrapper.models.user import User
-
         in_found = User()
         in_found.username="adabalubaba"
         in_found.exists = False

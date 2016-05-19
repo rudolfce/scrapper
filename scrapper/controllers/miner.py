@@ -1,12 +1,13 @@
 #-*- encoding: utf-8 -*-
-import requests
 import json
 from datetime import datetime
+
+import requests
 from bs4 import BeautifulSoup
 from flask import current_app
 
-from scrapper.models.user import User
 from scrapper import make_celery
+from scrapper.models.user import User
 
 celery = make_celery(current_app)
 

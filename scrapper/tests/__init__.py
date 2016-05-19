@@ -6,7 +6,6 @@ from scrapper import db, create_app
 
 
 i = inspect()
-session = list(i.active().keys())[0]
 
 class testBase(TestCase):
     def create_app(self):
@@ -23,6 +22,7 @@ class testBase(TestCase):
         self.db.init_app(self.app)
 
     def tearDown(self):
+        session = list(i.active().keys())[0]
         while len(i.active()[session]):
             pass # Wait for task to be complete
         self.db.session.remove()
