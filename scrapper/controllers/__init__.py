@@ -16,7 +16,7 @@ def index():
 def show_user(user_name=None):
     refresh = request.args.get('refresh', '')
     user = query_database(user_name)
-    if (not user) or refresh:
+    if not user or refresh:
         scrape_twitter.delay(user_name)
         return make_response('Processing...', status.HTTP_202_ACCEPTED)
     else:

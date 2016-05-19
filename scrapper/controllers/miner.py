@@ -16,7 +16,7 @@ def scrape_twitter(user_name):
     user.username = user_name
     url_request = 'https://twitter.com/' + str(user_name)
     response = requests.get(url_request)
-    if not (response.status_code == 404):
+    if response.status_code == 200:
         soup = BeautifulSoup(response.text, "html.parser")
 
         data = soup.find("input", attrs={"class":"json-data"})
@@ -29,7 +29,7 @@ def scrape_twitter(user_name):
         time = datetime.now()
         user.query_date = time.strftime('%m/%d/%Y %I:%M%p')
 
-    user.save()
+        user.save()
 
 def query_database(user_name):
     '''
