@@ -1,27 +1,30 @@
 #-*- encoding: utf-8 -*-
 import os
-from flask import render_template, request, redirect, Blueprint
+import json
+from flask import render_template, request, redirect, Blueprint, abort, make_response
+from flask.ext.api import status
 
-from scrapper.controllers.miner import mine_user
+from scrapper.controllers.twitter import twitter_bp
+from scrapper.controllers.miner import query_database, scrape_twitter
 
 
-twitter = Blueprint('twitter', __name__, url_prefix = '/twitter')
-
-@twitter.route('/', methods=['GET', 'POST'])
+@twitter_bp.route('/', methods=['GET', 'POST'])
 def index():
-    if request.method == 'GET':
-        page_output="index"
-        user = None
-        return render_template("index.html", user=user, page_output=page_output)
-    else:
-        return redirect('/twitter/{}'.format(request.form['user_name']))
+    abort(status.HTTP_400_BAD_REQUEST)
 
-@twitter.route('/<user_name>')
+@twitter_bp.route('/<user_name>')
 def show_user(user_name=None):
     refresh = request.args.get('refresh', '')
-    page_output = "user"
-    user = miner.mine_user(user_name, refresh)
-    return render_template("index.html", user=user, page_output=page_output)
+    user = query_database(user_name)
+    if not user or refresh:
+        scrape_twitter.delay(user_name)
+        return make_response('Processing...', status.HTTP_202_ACCEPTED)
+    else:
+        if user['exists']:
+            user = json.dumps(user)
+            return user, status.HTTP_200_OK
+        else:
+            abort(status.HTTP_404_NOT_FOUND)
 
 if __name__ == "__main__":
     app.run()

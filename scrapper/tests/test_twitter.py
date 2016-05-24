@@ -1,26 +1,32 @@
+import json
+
+from scrapper.models.user import User
 from scrapper.tests import testBase
 
 
 class twitterTest(testBase):
     def test_root(self):
         response = self.client.get('/twitter/')
-        assert response.status_code == 200
-        response_data = response.get_data(as_text = True)
-        assert "You should really" in response_data
+        assert response.status_code == 400
 
     def test_user_request(self):
         response = self.client.get('/twitter/flubbercwb')
+        assert response.status_code == 202
+
+    def test_user_found(self):
+        in_found = User()
+        in_found.username="adabalubaba"
+        in_found.exists = True
+        in_found.save()
+
+        response = self.client.get('/twitter/adabalubaba')
         assert response.status_code == 200
-        response_data = response.get_data(as_text = True)
-        assert "Fresh" in response_data
-        response = self.client.get('/twitter/flubbercwb')
-        assert response.status_code == 200
-        response_data = response.get_data(as_text = True)
-        assert not ("Fresh" in response_data)
 
     def test_no_user_found(self):
-        response = self.client.get('/twitter/ababalubaba')
-        assert response.status_code == 200
-        response_data = response.get_data(as_text = True)
-        assert "User not found" in response_data        
+        in_found = User()
+        in_found.username="adabalubaba"
+        in_found.exists = False
+        in_found.save()
 
+        response = self.client.get('/twitter/adabalubaba')
+        assert response.status_code == 404
