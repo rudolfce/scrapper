@@ -1,5 +1,6 @@
 from scrapper import db
 
+
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -8,13 +9,16 @@ class User(db.Model):
     bio = db.Column(db.String(160))
     location = db.Column(db.String(160))
     query_date = db.Column(db.String(20))
+    exists = db.Column(db.Boolean)
 
-    def __init__(self, name='', username='', bio='', location='', query_date=''):
+    def __init__(self, name='', username='', bio='', location='', query_date='',
+                 exists=False):
         self.name = name
         self.username = username
         self.bio = bio
         self.location = location
         self.query_date = query_date
+        self.exists = exists
 
     def __repr__(self):
         return "<User {0!r}>".format(self.username)
@@ -34,4 +38,5 @@ class User(db.Model):
                 "username": self.username,
                 "bio": self.bio,
                 "location": self.location,
-                "query_date": self.query_date}
+                "query_date": self.query_date,
+                "exists": self.exists}
