@@ -46,7 +46,7 @@ Depending on your system, SQL server or specific libraries, you might
 need to install some packages from your package manager.
 
 It is important to set the database before launching. To initialize the database,
-first the config/db\_data.json must be set to match your preferences and the
+first the config/default.py must be set to match your preferences and the
 server you have running. Once the settings are to your taste, you can run
 the init\_db command from manage.py:
 
